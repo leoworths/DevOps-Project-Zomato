@@ -129,9 +129,10 @@ module "ec2_instance" {
     Terraform   = "true"
     Environment = "dev"
   }
-  root_block_device = {
-    volume_size = 30
-    volume_type = "gp3"
-  }
-  
-  }
+  root_block_device = [
+    {
+      volume_size = 30
+      volume_type = "gp3"
+  }]
+
+}
