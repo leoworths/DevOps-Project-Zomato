@@ -6,15 +6,25 @@ pipeline {
     }
     environment {
         SCANNER_HOME=tool 'sonar-scanner'
+<<<<<<< HEAD
         ECR_REPO_NAME = 'zomato-repo'
     }
     stages {
         stage("Clean Workspace") {
+=======
+    }
+    stages {
+        stage ("clean workspace") {
+>>>>>>> 94acad9399cc0c677fc1ebf25f98e1b1973d2123
             steps {
                 cleanWs()
             }
         }
+<<<<<<< HEAD
         stage("Git Checkout") {
+=======
+        stage ("Git Checkout") {
+>>>>>>> 94acad9399cc0c677fc1ebf25f98e1b1973d2123
             steps {
                 git branch: 'main', credentialsId: 'git-cred', url: 'https://github.com/leoworths/DevOps-Project-Zomato.git'
             }
@@ -30,7 +40,11 @@ pipeline {
         stage("Code Quality Gate"){
             steps {
                 script {
+<<<<<<< HEAD
                     waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-token'
+=======
+                    waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-token' 
+>>>>>>> 94acad9399cc0c677fc1ebf25f98e1b1973d2123
                 }
             } 
         }
@@ -41,6 +55,7 @@ pipeline {
         }
         stage('OWASP FS SCAN') {
             steps {
+<<<<<<< HEAD
                 dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'owasp'
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
@@ -62,10 +77,33 @@ pipeline {
                         def ECR_URL = "${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com"
                         sh "aws ecr describe-repositories --repository-names ${ECR_REPO_NAME} || aws ecr create-repository --repository-name ${ECR_REPO_NAME}"
                         sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ECR_URL}"
+=======
+                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit -n', odcInstallation: 'owasp'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+    }
+}
+        stage ("Trivy File Scan") {
+            steps {
+                sh "trivy fs . > trivy.txt"
+            }
+        }
+        stage ("Build Docker Image") {
+            steps {
+                sh "docker build -t zomato ."
+            }
+        }
+        stage ("Tag & Push to DockerHub") {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker-login') {
+                        sh "docker tag zomato leoworths/zomato:latest "
+                        sh "docker push leoworths/zomato:latest "
+>>>>>>> 94acad9399cc0c677fc1ebf25f98e1b1973d2123
                     }
                 }
             }
         }
+<<<<<<< HEAD
         stage("Tag & Push to ECR") {
             steps {
                 script {
@@ -98,6 +136,16 @@ pipeline {
                         sh "docker rmi -f ${ECR_URL}/${ECR_REPO_NAME}:latest"
                     }
                 }
+=======
+        stage ("Deploy to Container") {
+            steps {
+                sh 'docker run -d --name zomato -p 3000:3000 leoworths/zomato:latest'
+            }
+        }
+        stage( "Cleanup Images") {
+            steps {
+                sh "docker rmi -f leoworths/zomato:latest"
+>>>>>>> 94acad9399cc0c677fc1ebf25f98e1b1973d2123
             }
         }
     }
