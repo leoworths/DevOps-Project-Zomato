@@ -18,7 +18,7 @@ sudo systemctl start jenkins
 sudo systemctl status jenkins
 
 ##Install Docker and Run SonarQube as Container
-<<<<<<< HEAD
+
 #sudo apt-get update
 #sudo apt-get install docker.io -y
 #sudo usermod -aG docker ubuntu
@@ -61,16 +61,11 @@ sudo systemctl restart docker
 
 # Enable Docker to start on boot
 sudo systemctl enable docker
-#run sonarqube as container
-=======
-sudo apt-get update
-sudo apt-get install docker.io -y
-sudo usermod -aG docker ubuntu
-sudo usermod -aG docker jenkins  
-newgrp docker
-sudo chmod 777 /var/run/docker.sock
->>>>>>> 94acad9399cc0c677fc1ebf25f98e1b1973d2123
-docker run -d --name sonar -p 9000:9000 sonarqube:lts-community
+
+#install sonarqube to run on docker
+sudo docker run -d --name sonarqube -p 9000:9000 sonarqube:lts-community
+
+
 
 #install trivy
 sudo apt-get install wget apt-transport-https gnupg lsb-release -y
@@ -86,7 +81,7 @@ sudo unzip awscliv2.zip
 sudo ./aws/install
 
 #install kubectl
-<<<<<<< HEAD
+
 curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.30.6/2024-11-15/bin/linux/amd64/kubectl
 #curl -LO https://dl.k8s.io/release/v1.26.0/bin/linux/amd64/kubectl
 chmod +x ./kubectl
@@ -94,20 +89,24 @@ mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$HOME/bin:$P
 #sudo mv kubectl /usr/local/bin/
 
 
-# install eksctl
-=======
-curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.31.0/2024-09-12/bin/linux/amd64/kubectl
-chmod +x kubectl
-sudo mv kubectl /usr/local/bin/
 
 #install eksctl
->>>>>>> 94acad9399cc0c677fc1ebf25f98e1b1973d2123
 ARCH=amd64
 PLATFORM=$(uname -s)_$ARCH
-curl -sLO "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_$PLATFORM.tar.gz"
+curl -sLO "https://github.com/
+eksctl-io/eksctl/releases/latest/download/eksctl_$PLATFORM.tar.gz"
 sudo tar -xzf eksctl_$PLATFORM.tar.gz -C /tmp && rm eksctl_$PLATFORM.tar.gz
-<<<<<<< HEAD
 sudo mv /tmp/eksctl /usr/local/bin
-=======
-sudo mv /tmp/eksctl /usr/local/bin
->>>>>>> 94acad9399cc0c677fc1ebf25f98e1b1973d2123
+
+
+#get sonarqube public ip
+echo "Sonarqube url is http://$(curl -s ifconfig.me):9000"
+#get sonarqube username and password
+echo "Sonarqube username is admin"
+echo "Sonarqube password is admin"
+
+#get jenkins public ip
+echo "Jenkins url is http://$(curl -s ifconfig.me):8080"
+#get jenkins username and password
+echo "Jenkins username is admin"
+echo "Jenkins password is $(sudo cat /var/lib/jenkins/secrets/initialAdminPassword)"
