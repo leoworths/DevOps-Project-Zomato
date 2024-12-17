@@ -1,9 +1,8 @@
+# create deployment.yaml file
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: zomato
-  labels:
-    app: zomato
 spec:
   replicas: 2
   selector:
@@ -16,7 +15,7 @@ spec:
     spec:
       containers:
       - name: zomato
-        image:727646465604.dkr.ecr.us-east-1.amazonaws.com/zomato-repo:latest
-        image: kastrov/zomato:latest
+        image: 727646465604.dkr.ecr.us-east-1.amazonaws.com/zomato-repo:latest
         ports:
         - containerPort: 3000
+

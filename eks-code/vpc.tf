@@ -21,5 +21,4 @@ module "vpc" {
   }
 
   tags = local.tags
-  depends_on = [module.eks]
 }
