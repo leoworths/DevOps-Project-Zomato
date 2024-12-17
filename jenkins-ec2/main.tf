@@ -14,7 +14,6 @@ module "vpc" {
   private_subnets    = var.private_subnets
   enable_nat_gateway = true
   single_nat_gateway = true
-
   tags = {
     Name        = "jenkins-vpc"
     Terraform   = "true"
@@ -75,6 +74,40 @@ module "security_group" {
       to_port     = 9000
       protocol    = "tcp"
       description = "sonar"
+      cidr_blocks = "0.0.0.0/0"
+    },
+    {
+      from_port   = 9090
+      to_port     = 9090
+      protocol    = "tcp"
+      description = "prometheus"
+      cidr_blocks = "0.0.0.0/0"
+    },
+    {
+      from_port   = 9100
+      to_port     = 9100
+      protocol    = "tcp"
+      description = "node exporter"
+    },
+    {
+      from_port   = 3000
+      to_port     = 3000
+      protocol    = "tcp"
+      description = "grafana"
+      cidr_blocks = "0.0.0.0/0"
+    },
+    {
+      from_port   = 50000
+      to_port     = 50000
+      protocol    = "tcp"
+      description = "jenkins"
+      cidr_blocks = "0.0.0.0/0"
+    },
+    {
+      from_port   = 80
+      to_port     = 80
+      protocol    = "tcp"
+      description = "http"
       cidr_blocks = "0.0.0.0/0"
     },
     {
