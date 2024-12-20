@@ -21,11 +21,15 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.terraform
+.terraform.lock.hcl
 .lock.hcl
 terraform.tfstate
 terraform.tfstate.backup
 terraform.tfvars.json
 terraform.tfstate.backup
 .gitignore
+eks-code/.terraform*
+eks-code/terraform*
+jenkins-ec2/.terraform*
+jenkins-ec2/terraform*
 
