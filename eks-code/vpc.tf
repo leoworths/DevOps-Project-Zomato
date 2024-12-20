@@ -11,7 +11,9 @@ module "vpc" {
   intra_subnets   = local.intra_subnets
 
   enable_nat_gateway = true
-  single_nat_gateway = true
+  single_nat_gateway = true 
+  one_nat_gateway_per_az = false
+  map_public_ip_on_launch = true
   public_subnet_tags = {
     "kubernetes.io/role/elb" = 1
   }

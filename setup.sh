@@ -22,27 +22,27 @@ kubectl patch svc argocd-server -n argocd -p '{"spec":{"type":"LoadBalancer"}}'
 #kubectl create namespace monitoring
 
 # install Prometheus Stack
-helm install prometheus prometheus-community/kube-prometheus-stack -n monitoring --create-namespace
+helm install stable prometheus-community/kube-prometheus-stack -n monitoring --create-namespace
 
 # Expose Prometheus Service as LoadBalancer
-kubectl patch svc prometheus-kube-prometheus-prometheus -n monitoring -p '{"spec":{"type":"LoadBalancer"}}'
+kubectl patch svc stable-kube-prometheus-prometheus -n monitoring -p '{"spec":{"type":"LoadBalancer"}}'
 
 
 # Deploy Grafana
-kubectl patch svc prometheus-grafana -n monitoring -p '{"spec":{"type":"LoadBalancer"}}'
+kubectl patch svc stable-grafana -n monitoring -p '{"spec":{"type":"LoadBalancer"}}'
 
 
 
 #Retrieve Prometheus URL
-prometheus_url=$(kubectl get svc prometheus-kube-prometheus-prometheus -n monitoring -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+prometheus_url=$(kubectl get svc stable-kube-prometheus-prometheus -n monitoring -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
 echo "Prometheus URL: http://$prometheus_url:9090"
 
 
 #Retrieve Grafana URL and Admin Password
-grafana_url=$(kubectl get svc prometheus-grafana -n monitoring -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+grafana_url=$(kubectl get svc stable-grafana -n monitoring -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
 echo "Grafana URL: http://$grafana_url"
 
-grafana_password=$(kubectl get secret -n monitoring prometheus-grafana -o jsonpath="{.data.admin-password}" | base64 --decode)
+grafana_password=$(kubectl get secret -n monitoring stable-grafana -o jsonpath="{.data.admin-password}" | base64 --decode)
 echo "Grafana Admin Password: $grafana_password"
 
 #Retrieve ArgoCD URL and Admin Password
